@@ -7,7 +7,7 @@ exports.getLastId = exports.deleteTruckById = exports.updateTruckById = exports.
 var connections_1 = __importDefault(require("../db/connections"));
 //Get All Trucks Function
 var getAllTrucks = function (req, res) {
-    connections_1.default.query("SELECT * FROM trucks", function (err, data, fields) {
+    connections_1.default.query("SELECT * FROM trucks", function (err, data) {
         if (err) {
             res.status(500).json({
                 status: "error",
@@ -25,14 +25,14 @@ exports.getAllTrucks = getAllTrucks;
 //Add a New Trucks Function
 var addNewTruck = function (req, res) {
     var query = "INSERT INTO trucks(name) values(?)";
-    var name = req.body.name;
-    if (name === undefined) {
+    var name = (req.body || "").name;
+    if (name === undefined || !name) {
         return res.status(400).json({
             status: "error",
             message: "Name field is required!",
         });
     }
-    connections_1.default.query(query, [name], function (err) {
+    connections_1.default.query(query, [String(name)], function (err) {
         if (err) {
             res.status(500).json({
                 status: "error",
@@ -49,8 +49,14 @@ var addNewTruck = function (req, res) {
 exports.addNewTruck = addNewTruck;
 //Get Given Truck Function
 var getTruckById = function (req, res) {
-    var id = req.params.id;
-    var query = "SELECT * from trucks where id = ".concat(id);
+    var id = (req.params || "").id;
+    if (id === undefined || !id) {
+        return res.status(400).json({
+            status: "error",
+            message: "ID parameter is required",
+        });
+    }
+    var query = "SELECT * from trucks where id = ".concat(parseInt(id));
     connections_1.default.query(query, function (err, data) {
         if (err) {
             if (err.code === "ER_BAD_FIELD_ERROR") {
@@ -81,15 +87,21 @@ var getTruckById = function (req, res) {
 exports.getTruckById = getTruckById;
 //Update Given Truck Function
 var updateTruckById = function (req, res) {
-    var id = req.params.id;
-    var name = req.body.name;
-    if (name === undefined) {
+    var id = (req.params || "").id;
+    var name = (req.body || "").name;
+    if (id === undefined || !id) {
+        return res.status(400).json({
+            status: "error",
+            message: "ID parameter is required",
+        });
+    }
+    if (name === undefined || !name) {
         return res.status(404).json({
             status: "error",
             message: "Name field is required!",
         });
     }
-    var query = "UPDATE trucks SET name = '".concat(name, "' where id = ").concat(id);
+    var query = "UPDATE trucks SET name = ".concat(String(name), " where id = ").concat(parseInt(id));
     connections_1.default.query(query, function (err, data, fields) {
         if ((data === null || data === void 0 ? void 0 : data.affectedRows) === 0) {
             return res.status(404).json({
@@ -118,8 +130,14 @@ var updateTruckById = function (req, res) {
 exports.updateTruckById = updateTruckById;
 //Update Given Truck Function
 var deleteTruckById = function (req, res) {
-    var id = req.params.id;
-    var query = "DELETE FROM trucks where id = ".concat(id);
+    var id = (req.params || "").id;
+    if (id === undefined || !id) {
+        return res.status(400).json({
+            status: "error",
+            message: "ID parameter is required",
+        });
+    }
+    var query = "DELETE FROM trucks where id = ".concat(parseInt(id));
     connections_1.default.query(query, function (err, data) {
         if ((data === null || data === void 0 ? void 0 : data.affectedRows) === 0) {
             return res.status(404).json({

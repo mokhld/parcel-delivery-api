@@ -42,10 +42,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var supertest_1 = __importDefault(require("supertest"));
 var createServer_1 = __importDefault(require("../utils/createServer"));
 var app = (0, createServer_1.default)();
-describe('truck', function () {
-    describe('get truck route', function () {
-        describe('get all trucks', function () {
-            it('should return a 200', function () { return __awaiter(void 0, void 0, void 0, function () {
+describe("truck", function () {
+    describe("get truck route", function () {
+        describe("get all trucks", function () {
+            it("should return a 200", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var _a, status, body;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
@@ -53,20 +53,20 @@ describe('truck', function () {
                         case 1:
                             _a = _b.sent(), status = _a.status, body = _a.body;
                             expect(status).toBe(200);
-                            expect(body.status).toBe('success');
+                            expect(body.status).toBe("success");
                             expect(body.data).toEqual(expect.arrayContaining([expect.any(Object)]));
                             return [2 /*return*/];
                     }
                 });
             }); });
         });
-        describe('given truck does not exist', function () {
-            it('should return a 404', function () { return __awaiter(void 0, void 0, void 0, function () {
+        describe("given truck does not exist", function () {
+            it("should return a 404", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var truckId;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            truckId = 'test-123';
+                            truckId = "test-123";
                             return [4 /*yield*/, (0, supertest_1.default)(app).get("/trucks/".concat(truckId)).expect(404)];
                         case 1:
                             _a.sent();
@@ -75,8 +75,8 @@ describe('truck', function () {
                 });
             }); });
         });
-        describe('given truck does exist', function () {
-            it('should return a 200 status and the truck', function () { return __awaiter(void 0, void 0, void 0, function () {
+        describe("given truck does exist", function () {
+            it("should return a 200 status and the truck", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var truckId;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -90,61 +90,61 @@ describe('truck', function () {
                 });
             }); });
         });
-        describe('Add a new truck with a name parameter', function () {
-            it('should return a 201 status and a succcess message', function () { return __awaiter(void 0, void 0, void 0, function () {
+        describe("Add a new truck with a name parameter", function () {
+            it("should return a 201 status and a succcess message", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var _a, statusCode, body;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0: return [4 /*yield*/, (0, supertest_1.default)(app)
-                                .post('/trucks')
-                                .send({ name: 'testTruck' })];
+                                .post("/trucks")
+                                .send({ name: "testTruck" })];
                         case 1:
                             _a = _b.sent(), statusCode = _a.status, body = _a.body;
                             expect(statusCode).toBe(201);
-                            expect(body.status).toEqual('success');
+                            expect(body.status).toEqual("success");
                             return [2 /*return*/];
                     }
                 });
             }); });
         });
-        describe('Add a new truck without name parameter', function () {
-            it('should return a 400 status and an error message', function () { return __awaiter(void 0, void 0, void 0, function () {
+        describe("Add a new truck without name parameter", function () {
+            it("should return a 400 status and an error message", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var _a, statusCode, body;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0: return [4 /*yield*/, (0, supertest_1.default)(app)
-                                .post('/trucks')
+                                .post("/trucks")
                                 .send()];
                         case 1:
                             _a = _b.sent(), statusCode = _a.status, body = _a.body;
                             expect(statusCode).toBe(400);
-                            expect(body.status).toEqual('error');
+                            expect(body.status).toEqual("error");
                             return [2 /*return*/];
                     }
                 });
             }); });
         });
-        describe('Update the truck that does not exist', function () {
-            it('should return a 404 status and a error message', function () { return __awaiter(void 0, void 0, void 0, function () {
+        describe("Update the truck that does not exist", function () {
+            it("should return a 404 status and a error message", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var truckId, _a, statusCode, body;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
-                            truckId = 'test-123';
+                            truckId = "test-123";
                             return [4 /*yield*/, (0, supertest_1.default)(app)
                                     .put("/trucks/".concat(truckId))
-                                    .send({ name: 'testTruck' })];
+                                    .send({ name: "testTruck" })];
                         case 1:
                             _a = _b.sent(), statusCode = _a.status, body = _a.body;
                             expect(statusCode).toBe(404);
-                            expect(body.status).toEqual('error');
+                            expect(body.status).toEqual("error");
                             return [2 /*return*/];
                     }
                 });
             }); });
         });
-        describe('Update the truck with a name parameter', function () {
-            it('should return a 200 status and a succcess message', function () { return __awaiter(void 0, void 0, void 0, function () {
+        describe("Update the truck with a name parameter", function () {
+            it("should return a 200 status and a succcess message", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var truckId, _a, statusCode, body;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
@@ -152,18 +152,18 @@ describe('truck', function () {
                             truckId = 6;
                             return [4 /*yield*/, (0, supertest_1.default)(app)
                                     .put("/trucks/".concat(truckId))
-                                    .send({ name: 'newTruck' })];
+                                    .send({ name: "newTruck" })];
                         case 1:
                             _a = _b.sent(), statusCode = _a.status, body = _a.body;
                             expect(statusCode).toBe(200);
-                            expect(body.status).toEqual('success');
+                            expect(body.status).toEqual("success");
                             return [2 /*return*/];
                     }
                 });
             }); });
         });
-        describe('Delete a truck by ID', function () {
-            it('should return a 200 status and a succcess message', function () { return __awaiter(void 0, void 0, void 0, function () {
+        describe("Delete a truck by ID", function () {
+            it("should return a 200 status and a succcess message", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var selectBody, truckId, _a, statusCode, body;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
@@ -175,24 +175,24 @@ describe('truck', function () {
                         case 2:
                             _a = _b.sent(), statusCode = _a.status, body = _a.body;
                             expect(statusCode).toBe(200);
-                            expect(body.status).toEqual('success');
+                            expect(body.status).toEqual("success");
                             return [2 /*return*/];
                     }
                 });
             }); });
         });
-        describe('Delete the truck that does not exist', function () {
-            it('should return a 404 status and a error message', function () { return __awaiter(void 0, void 0, void 0, function () {
+        describe("Delete the truck that does not exist", function () {
+            it("should return a 404 status and a error message", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var truckId, _a, statusCode, body;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
-                            truckId = 'test-123';
+                            truckId = "test-123";
                             return [4 /*yield*/, (0, supertest_1.default)(app).delete("/trucks/".concat(truckId))];
                         case 1:
                             _a = _b.sent(), statusCode = _a.status, body = _a.body;
                             expect(statusCode).toBe(404);
-                            expect(body.status).toEqual('error');
+                            expect(body.status).toEqual("error");
                             return [2 /*return*/];
                     }
                 });

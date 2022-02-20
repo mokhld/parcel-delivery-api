@@ -7,8 +7,8 @@ exports.unloadParcelById = exports.getLoadedTruckById = exports.loadTruck = expo
 var connections_1 = __importDefault(require("../db/connections"));
 //Get All Loads Function
 var getAllLoads = function (req, res) {
-    var query = "select t.id truck_id, t.name truck_name, sum(p.weight) weight, count(l.parcel_id) parcel_count from loads l, parcels p, trucks t where l.parcel_id = p.id and l.truck_id = t.id group by l.truck_id";
-    connections_1.default.query(query, function (err, data, fields) {
+    var query = "select t.id truck_id, t.name truck_name, sum(p.weight) weight, count(l.parcel_id) parcel_count from loads l, parcels p, trucks t where l.parcel_id = p.id and l.truck_id = t.id  group by l.truck_id";
+    connections_1.default.query(query, function (err, data) {
         if (err) {
             res.status(500).json({
                 status: "error",
@@ -25,15 +25,18 @@ var getAllLoads = function (req, res) {
 exports.getAllLoads = getAllLoads;
 //Add a New Load Function
 var loadTruck = function (req, res) {
-    var _a = req.body, truck_id = _a.truck_id, parcel_id = _a.parcel_id;
-    if (!truck_id || !parcel_id) {
+    var _a = req.body || "", truck_id = _a.truck_id, parcel_id = _a.parcel_id;
+    if (truck_id === undefined ||
+        !truck_id ||
+        parcel_id === undefined ||
+        !parcel_id) {
         return res.status(400).json({
             status: "error",
             message: "TruckId and ParcelId fields are required!",
         });
     }
     var query = "INSERT INTO loads(truck_id, parcel_id, status) values (?,?, ?)";
-    connections_1.default.query(query, [truck_id, parcel_id, 0], function (err) {
+    connections_1.default.query(query, [parseInt(truck_id), parseInt(parcel_id), 0], function (err) {
         if (err) {
             res.status(500).json({
                 status: "error",
@@ -50,9 +53,15 @@ var loadTruck = function (req, res) {
 exports.loadTruck = loadTruck;
 //Get Loaded Truck Details by TruckID
 var getLoadedTruckById = function (req, res) {
-    var id = req.params.id;
+    var id = (req.params || "").id;
+    if (id === undefined || !id) {
+        return res.status(400).json({
+            status: "error",
+            message: "ID parameter is required",
+        });
+    }
     var query = "select t.id truck_id, t.name truck_name,p.name, p.weight, case when l.status = 0 then 'loaded' else 'unloaded' END as status from loads l, parcels p, trucks t where l.parcel_id = p.id and l.truck_id = t.id and l.truck_id = ?";
-    connections_1.default.query(query, [id], function (err, data) {
+    connections_1.default.query(query, [parseInt(id)], function (err, data) {
         if ((data === null || data === void 0 ? void 0 : data.length) === 0) {
             return res.status(404).json({
                 status: "error",
@@ -81,15 +90,18 @@ var getLoadedTruckById = function (req, res) {
 exports.getLoadedTruckById = getLoadedTruckById;
 //Unload Parcel By ParcelID
 var unloadParcelById = function (req, res) {
-    var _a = req.body, parcel_id = _a.parcel_id, truck_id = _a.truck_id;
-    if (!truck_id || !parcel_id) {
+    var _a = req.body || "", parcel_id = _a.parcel_id, truck_id = _a.truck_id;
+    if (truck_id === undefined ||
+        !truck_id ||
+        parcel_id === undefined ||
+        !parcel_id) {
         return res.status(400).json({
             status: "error",
             message: "TruckId and ParcelId fields are required!",
         });
     }
     var query = "UPDATE loads SET status = 1 where parcel_id = ? and truck_id = ?";
-    connections_1.default.query(query, [parcel_id, truck_id], function (err, data) {
+    connections_1.default.query(query, [parseInt(parcel_id), parseInt(truck_id)], function (err, data) {
         if ((data === null || data === void 0 ? void 0 : data.affectedRows) === 0) {
             return res.status(404).json({
                 status: "error",

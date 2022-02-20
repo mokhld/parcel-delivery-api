@@ -1,2 +1,9 @@
 node_modules
 .env
+.eslintignore
+.eslintrc
+.DS_Store
+pids
+logs
+results
+build

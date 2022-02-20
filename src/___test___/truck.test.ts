@@ -1,39 +1,106 @@
-Here is the bare mysql code to create empty tables:
+import supertest from "supertest";
+import createServer from "../utils/createServer";
 
-drop database testdatabase;
+const app = createServer();
 
-create database testdatabase;
+describe("truck", () => {
+  describe("get truck route", () => {
+    describe("get all trucks", () => {
+      it("should return a 200", async () => {
+        const { status, body } = await supertest(app).get(`/trucks`);
 
-use testdatabase;
+        expect(status).toBe(200);
 
-CREATE TABLE `trucks` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
-);
+        expect(body.status).toBe("success");
 
-CREATE TABLE `parcels` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `weight` double NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
-);
+        expect(body.data).toEqual(expect.arrayContaining([expect.any(Object)]));
+      });
+    });
 
-CREATE TABLE `loads` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `truck_id` int NOT NULL,
-  `parcel_id` int NOT NULL,
-  `status` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `truck_id` (`truck_id`),
-  KEY `parcel_id` (`parcel_id`),
-  CONSTRAINT `loads_ibfk_1` FOREIGN KEY (`truck_id`) REFERENCES `trucks` (`id`),
-  CONSTRAINT `loads_ibfk_2` FOREIGN KEY (`parcel_id`) REFERENCES `parcels` (`id`)
-);
+    describe("given truck does not exist", () => {
+      it("should return a 404", async () => {
+        const truckId = "test-123";
+        await supertest(app).get(`/trucks/${truckId}`).expect(404);
+      });
+    });
+    describe("given truck does exist", () => {
+      it("should return a 200 status and the truck", async () => {
+        const truckId = 6;
+        await supertest(app).get(`/trucks/${truckId}`).expect(200);
+      });
+    });
+    describe("Add a new truck with a name parameter", () => {
+      it("should return a 201 status and a succcess message", async () => {
+        const { status: statusCode, body } = await supertest(app)
+          .post("/trucks")
+          .send({ name: "testTruck" });
 
+        expect(statusCode).toBe(201);
 
-select *  from trucks;
-select * from parcels;
-select * from loads;
+        expect(body.status).toEqual("success");
+      });
+    });
+    describe("Add a new truck without name parameter", () => {
+      it("should return a 400 status and an error message", async () => {
+        const { status: statusCode, body } = await supertest(app)
+          .post("/trucks")
+          .send();
+
+        expect(statusCode).toBe(400);
+
+        expect(body.status).toEqual("error");
+      });
+    });
+    describe("Update the truck that does not exist", () => {
+      it("should return a 404 status and a error message", async () => {
+        const truckId = "test-123";
+        const { status: statusCode, body } = await supertest(app)
+          .put(`/trucks/${truckId}`)
+          .send({ name: "testTruck" });
+
+        expect(statusCode).toBe(404);
+
+        expect(body.status).toEqual("error");
+      });
+    });
+    // describe("Update the truck with a name parameter", () => {
+    //   it("should return a 200 status and a succcess message", async () => {
+    //     const truckId = 6;
+    //     const { status: statusCode, body } = await supertest(app)
+    //       .put(`/trucks/${truckId}`)
+    //       .send({ name: "newTruck" });
+
+    //     expect(statusCode).toBe(200);
+
+    //     expect(body.status).toEqual("success");
+    //   });
+    // });
+    describe("Delete a truck by ID", () => {
+      it("should return a 200 status and a succcess message", async () => {
+        const { body: selectBody } = await supertest(app).get(`/trucks/lastid`);
+
+        const truckId = selectBody.data[0].id;
+
+        const { status: statusCode, body } = await supertest(app).delete(
+          `/trucks/${truckId}`
+        );
+
+        expect(statusCode).toBe(200);
+
+        expect(body.status).toEqual("success");
+      });
+    });
+    describe("Delete the truck that does not exist", () => {
+      it("should return a 404 status and a error message", async () => {
+        const truckId = "test-123";
+        const { status: statusCode, body } = await supertest(app).delete(
+          `/trucks/${truckId}`
+        );
+
+        expect(statusCode).toBe(404);
+
+        expect(body.status).toEqual("error");
+      });
+    });
+  });
+});
