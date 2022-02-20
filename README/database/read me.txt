@@ -1,0 +1,4 @@
+DB dumps to create the databases (in order)
+1) testdatabase_trucks.sql
+2) testdatabase_parcels.sql
+3) tesdatabase_loads.sql
