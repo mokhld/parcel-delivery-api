@@ -1,4 +1,4 @@
-# Parcel Company API (Zava) Project
+# Parcel Company API Project
 
 This project (orginally a takehome for Zava) has been created using Node.js, TypeScript, Express.js, MySQL.
 
