@@ -4,13 +4,13 @@ This project (orginally a takehome for Zava) has been created using Node.js, Typ
 
 ## Requirements & Description
 
-✅ Endpoints created to add/get/delete/update loads/trucks/parcels.
-✅ The trucks, parcels and loads tables created in MySQL and used in the API.
-✅ The trucks and the parcels tables associated with loads table.
-✅ A truck can load/unload with a parcel.
-✅ The number of parcels and the trucks’ weight can be taken with the loads API endpoint.
-✅ Comment where needed have been added.
-✅ Relevant Explanations added.
+- Endpoints created to add/get/delete/update loads/trucks/parcels.
+- The trucks, parcels and loads tables created in MySQL and used in the API.
+- The trucks and the parcels tables associated with loads table
+- A truck can load/unload with a parcel.
+- The number of parcels and the trucks’ weight can be taken with the loads API endpoint.
+- Comment where needed have been added.
+- Relevant Explanations added.
 
 ## Setup Instrucitons
 
