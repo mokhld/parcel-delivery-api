@@ -1,6 +1,6 @@
 # Parcel Company API Project
 
-This project (orginally a takehome) has been created using Node.js, TypeScript, Express.js, MySQL.
+This project has been created using Node.js, TypeScript, Express.js, MySQL.
 
 ## Requirements & Description
 
